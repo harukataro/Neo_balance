@@ -10,6 +10,7 @@ def dataGet(address):
     # neoscan
     url = 'https://neoscan.io/'
     targetBlock = 2640000
+    neohash='c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b'
 
     #APIextention
     NeoGetBalance='api/main_net/v1/get_balance/'
@@ -27,20 +28,18 @@ def dataGet(address):
         if key['asset'] == "NEO":
                     Balance = key['amount']
 
-
     response=requests.get(paramStrT)
     content = response.json()
 
     for key in content['entries']:
-            #print(key['block_height'],key['amount'],key['address_to'])
             if key['block_height'] > targetBlock:
-                if key['address_to'] == address:
-                    amount = float(key['amount'])
-                    Balance = Balance + amount
-                    #print(Balance)
-                else:
-                    Balance = Balance - amount
-                    #print(Balance)
+                if key['asset'] == neohash:
+                    if key['address_to'] == address:
+                        amount = float(key['amount'])
+                        Balance = Balance - amount
+                    else:
+                        Balance = Balance + amount
+                        print(Balance)
     return Balance
 
 if __name__ == '__main__':
